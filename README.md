@@ -7,6 +7,14 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-orange.svg)](https://openai.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+## 🚧 Project Status
+
+**⚠️ This is an incomplete version - We welcome your feedback and contributions!**
+
+- 📝 **Share your needs**: Please submit feature requests and issues to help us improve
+- 🤝 **Join us**: Developers interested in collaboration are welcome to contribute
+- 💼 **Commercial inquiries**: For business opportunities, please contact the author via email
+
 ## 🌟 Features
 
 ### 🎯 Multi-Test Support
@@ -178,6 +186,17 @@ Select from curated, authentic test prompts
 3. Make your changes
 4. Submit a pull request
 
+## 🤝 Feedback & Collaboration
+
+We value your input! This project is actively being developed and improved:
+
+- 🐛 **Found a bug?** Please open an [issue](https://github.com/brycewang-stanford/TGIWriter/issues)
+- 💡 **Have a feature idea?** We'd love to hear about it in [discussions](https://github.com/brycewang-stanford/TGIWriter/discussions)
+- 🛠️ **Want to contribute?** Check out our [contribution guidelines](CONTRIBUTING.md)
+- 💼 **Business inquiries?** Contact the author at: [your-email@example.com]
+
+Your feedback helps make TGIWriter better for everyone!
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -193,6 +212,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 # TGIWriter - AI智能写作助手
 
 🚀 **为托福、GRE和雅思考试准备提供实时AI分析和反馈的智能写作助手**
+
+## 🚧 项目状态
+
+**⚠️ 这是一个不完善的版本 - 欢迎大家多提需求和建议！**
+
+- 📝 **分享您的需求**：请多提交功能需求和问题，帮助我们改进
+- 🤝 **一起合作**：有兴趣的开发者朋友欢迎一起合作改进
+- 💼 **商业合作**：有商业化兴趣的朋友可以发邮件联系作者
 
 ## 🌟 功能特色
 
@@ -319,6 +346,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **JavaScript**：现代ES6+特性的原生JS
 - **实时功能**：基于AJAX的实时分析
 - **响应式设计**：移动优先方法
+
+## 🤝 反馈与合作
+
+我们非常重视您的意见！本项目正在积极开发和改进中：
+
+- 🐛 **发现了Bug？** 请提交 [问题报告](https://github.com/brycewang-stanford/TGIWriter/issues)
+- 💡 **有功能建议？** 欢迎在 [讨论区](https://github.com/brycewang-stanford/TGIWriter/discussions) 分享
+- 🛠️ **想要参与开发？** 查看我们的[贡献指南](CONTRIBUTING.md)
+- 💼 **商业合作咨询？** 请邮件联系作者：[your-email@example.com]
+
+您的反馈让TGIWriter变得更好！
 
 ## 📄 开源协议
 
