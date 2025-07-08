@@ -1,4 +1,5 @@
-# TGIWriter - AI-Powered Writing Assistant
+# TGIWriter - AI-Powered Writing Assistant<img width="1215" alt="image" src="https://github.com/user-attachments/assets/e7aa8994-5d7a-4b34-bb5b-65f10052682a" />
+
 
 🚀 **An intelligent writing assistant for TOEFL, GRE, and IELTS test preparation with real-time AI analysis and feedback**
 
