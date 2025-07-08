@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Assistant - Choose Your Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .test-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .test-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .test-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .test-card:hover .test-icon {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                ✍️ Writing Assistant
+            </h1>
+            <p class="text-xl md:text-2xl opacity-90 mb-8">
+                AI-Powered Writing Analysis for Test Success
+            </p>
+            <p class="text-lg opacity-80">
+                Choose your test and get personalized feedback to improve your writing skills
+            </p>
+        </div>
+    </div>
+
+    <!-- Test Selection -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Choose Your Test</h2>
+            <p class="text-lg text-gray-600">Select the test you're preparing for to get specialized feedback</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- TOEFL Card -->
+            <div class="test-card bg-white rounded-2xl p-8 text-center shadow-lg border border-gray-100 cursor-pointer" 
+                 onclick="window.location.href='/toefl'">
+                <div class="test-icon text-6xl mb-6">🇺🇸</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">TOEFL</h3>
+                <p class="text-gray-600 mb-6">Test of English as a Foreign Language</p>
+                
+                <div class="space-y-3 text-left mb-8">
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                        Academic Writing Focus
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                        Independent & Integrated Tasks
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                        30-Minute Time Limit
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                        ETS Official Rubric
+                    </div>
+                </div>
+                
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Start TOEFL Practice
+                </button>
+            </div>
+
+            <!-- GRE Card -->
+            <div class="test-card bg-white rounded-2xl p-8 text-center shadow-lg border border-gray-100 cursor-pointer" 
+                 onclick="window.location.href='/gre'">
+                <div class="test-icon text-6xl mb-6">🎓</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">GRE</h3>
+                <p class="text-gray-600 mb-6">Graduate Record Examination</p>
+                
+                <div class="space-y-3 text-left mb-8">
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                        Analytical Writing
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                        Issue & Argument Tasks
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                        30-Minute Essays
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+                        6-Point Scale
+                    </div>
+                </div>
+                
+                <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Start GRE Practice
+                </button>
+            </div>
+
+            <!-- IELTS Card -->
+            <div class="test-card bg-white rounded-2xl p-8 text-center shadow-lg border border-gray-100 cursor-pointer" 
+                 onclick="window.location.href='/ielts'">
+                <div class="test-icon text-6xl mb-6">🇬🇧</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">IELTS</h3>
+                <p class="text-gray-600 mb-6">International English Language Testing System</p>
+                
+                <div class="space-y-3 text-left mb-8">
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        Task 1 & Task 2 Writing
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        Academic & General Training
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        60-Minute Total
+                    </div>
+                    <div class="flex items-center text-gray-700">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        Band Score 0-9
+                    </div>
+                </div>
+                
+                <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                    Start IELTS Practice
+                </button>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="mt-20 text-center">
+            <h3 class="text-2xl font-bold text-gray-800 mb-8">Why Choose Our Writing Assistant?</h3>
+            <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-3xl mb-4">🤖</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">AI-Powered Analysis</h4>
+                    <p class="text-sm text-gray-600">Advanced AI provides detailed feedback on grammar, vocabulary, and structure</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-3xl mb-4">⏱️</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Real-Time Feedback</h4>
+                    <p class="text-sm text-gray-600">Get instant analysis as you write with highlighting and suggestions</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-3xl mb-4">🎯</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Test-Specific Tips</h4>
+                    <p class="text-sm text-gray-600">Customized advice based on official scoring rubrics for each test</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-3xl mb-4">📊</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Detailed Scoring</h4>
+                    <p class="text-sm text-gray-600">Comprehensive scoring based on official criteria with improvement suggestions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-20">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400 mb-4">© 2025 Writing Assistant. All rights reserved.</p>
+            <p class="text-sm text-gray-500">Powered by OpenAI GPT-4o-mini for the most accurate writing analysis</p>
+        </div>
+    </footer>
+</body>
+</html>
