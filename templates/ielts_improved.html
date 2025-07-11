@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Writing Assistant - TGI Writing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Alibaba+PuHuiTi+3.0:wght@400;500;600;700;800;900&family=Taviraj:wght@400;500;600;700&family=PingFang+SC:wght@400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'PingFang SC', 'Alibaba PuHuiTi 3.0', sans-serif; 
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background-color: #f0f8ee;
+        }
+        
+        .mode-content {
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-tab {
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-tab:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Writing overlay styles */
+        #writing-display {
+            font-size: 14px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        #user-essay:focus {
+            outline: none;
+            border-color: #358a55;
+            box-shadow: 0 0 0 3px rgba(53, 138, 85, 0.1);
+        }
+        
+        /* Enhanced highlight styles */
+        .highlight-error {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-bottom: 2px wavy #ef4444;
+            padding: 1px 2px;
+            border-radius: 2px;
+            animation: fadeInHighlight 0.5s ease-in;
+        }
+        
+        .highlight-grammar {
+            background-color: rgba(239, 68, 68, 0.15);
+            border-bottom: 2px dotted #ef4444;
+            padding: 1px 2px;
+            border-radius: 2px;
+            animation: fadeInHighlight 0.5s ease-in;
+        }
+        
+        .highlight-weakness {
+            background-color: rgba(251, 191, 36, 0.2);
+            border-bottom: 2px solid #f59e0b;
+            padding: 1px 2px;
+            border-radius: 2px;
+            animation: fadeInHighlight 0.5s ease-in;
+        }
+        
+        .highlight-vocab {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-bottom: 2px solid #3b82f6;
+            padding: 1px 2px;
+            border-radius: 2px;
+            animation: fadeInHighlight 0.5s ease-in;
+        }
+        
+        .highlight-strength {
+            background-color: rgba(34, 197, 94, 0.2);
+            border-bottom: 2px solid #22c55e;
+            padding: 1px 2px;
+            border-radius: 2px;
+            animation: fadeInHighlight 0.5s ease-in;
+        }
+        
+        .highlight-default {
+            background-color: rgba(156, 163, 175, 0.2);
+            border-bottom: 1px solid #9ca3af;
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+        
+        /* Highlight animations */
+        @keyframes fadeInHighlight {
+            0% { 
+                background-color: transparent; 
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% { 
+                background-color: inherit; 
+                transform: scale(1);
+            }
+        }
+        
+        /* Analysis panel styles */
+        #analysis-panel {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-width: 1024px) {
+            #analysis-panel {
+                width: 100%;
+                transform: translateY(100%);
+            }
+            
+            #analysis-panel:not(.translate-x-full) {
+                transform: translateY(0);
+            }
+            
+            .translate-x-full {
+                transform: translateY(100%) !important;
+            }
+        }
+        
+        /* Smooth transitions for panel */
+        #analysis-panel {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Custom scrollbar for analysis panel */
+        #feedback-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #feedback-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        #feedback-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        #feedback-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Logo styles similar to easywriting.site */
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            margin: 44px 0 42px 41px;
+        }
+        
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+        
+        .logo-badge {
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 65px;
+            height: 25px;
+            background-color: #358a55;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-text {
+            display: flex;
+            align-items: end;
+            margin-top: 8px;
+            gap: 8px;
+        }
+
+        /* Enhanced task card styling */
+        .TaskCard {
+            background: white;
+            border-radius: 20px;
+            margin: 0 24px;
+            margin-top: -12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid #358a55;
+        }
+
+        /* Button styling similar to easywriting.site */
+        .ai-score-btn {
+            background: #358a55;
+            border-radius: 50px;
+            border: 2px solid #358a55;
+            transition: all 0.3s ease;
+        }
+
+        .ai-score-btn:hover {
+            background: #2d7747;
+            transform: scale(1.05);
+        }
+
+        /* Tab styling */
+        .active-tab {
+            background: #f0f8ee;
+            transform: scale(1.05);
+            z-index: 10;
+            margin-right: -8px;
+        }
+
+        .inactive-tab {
+            background: #e5e7eb;
+            transform: scale(1);
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-50 text-gray-800">
+    <!-- Header -->
+    <header class="relative w-full h-24 bg-white shadow flex justify-between items-center fixed z-30">
+        <!-- Logo -->
+        <div class="logo-container">
+            <div class="logo-badge">
+                <div class="text-white text-lg font-black font-['Alibaba_PuHuiTi_3.0']">IELTS</div>
+            </div>
+            <div class="logo-text">
+                <div class="text-black text-3xl font-medium font-['Taviraj']">EasyWriting</div>
+                <div class="text-4xl">✍️</div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="hidden md:flex space-x-10 absolute left-[430px]">
+            <a href="/" class="text-[#333333] text-lg font-black font-['Alibaba PuHuiTi 3.0'] transition rounded cursor-pointer hover:bg-neutral-200 hover:scale-105 px-4 py-2">作文批改</a>
+            <a href="#" class="text-[#7b7b7b] text-lg font-normal font-['Alibaba PuHuiTi 3.0'] transition rounded cursor-pointer hover:bg-neutral-200 hover:scale-105 px-4 py-2">Step-by-step</a>
+            <a href="#" class="text-[#7b7b7b] text-lg font-normal font-['Alibaba PuHuiTi 3.0'] transition rounded cursor-pointer hover:bg-neutral-200 hover:scale-105 px-4 py-2">近期考题</a>
+            <a href="#" class="text-[#7b7b7b] text-lg font-normal font-['Alibaba PuHuiTi 3.0'] transition rounded cursor-pointer hover:bg-neutral-200 hover:scale-105 px-4 py-2">话题分类</a>
+            <a href="#" class="text-[#7b7b7b] text-lg font-normal font-['Alibaba PuHuiTi 3.0'] transition rounded cursor-pointer hover:bg-neutral-200 hover:scale-105 px-4 py-2">成为会员</a>
+        </nav>
+        
+        <!-- Auth Buttons -->
+        <div class="flex items-center space-x-2 mr-8">
+            <button class="w-28 h-12 px-5 py-1 rounded-full border border-[#e5e6ea] flex justify-center items-center hover:bg-neutral-200 hover:scale-105 transition-all">
+                <div class="text-[#011400] text-lg font-normal font-['PingFang SC']">登录</div>
+            </button>
+            <button class="w-28 h-12 px-5 py-1 bg-black rounded-full flex justify-center items-center hover:bg-slate-900 hover:scale-105 transition-all">
+                <div class="text-white text-lg font-normal font-['PingFang SC']">注册</div>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="bg-neutral-50 pt-24">
+        <div class="slideshow flex flex-col">
+            <div class="mx-auto w-full px-20 flex items-center justify-center flex-col h-auto rounded-2xl pt-4">
+                <div class="w-full max-w-2xl text-center text-[#011400] text-2xl font-normal font-['Taviraj'] mb-4">
+                    <span>Writing has never been so easy ！</span>
+                </div>
+                <div class="mt-4 w-full max-w-4xl">
+                    <div class="h-8 w-full text-center text-[#666666] text-base font-normal font-['Taviraj'] overflow-hidden relative">
+                        <div class="static-text">若您的批改次数用完，期待您 <strong>添加微信号客服: <span class="wechat-id">Jam2024JJ</span><button class="copy-btn ml-2" title="点击复制微信号"> 📋 </button></strong> . 邀请您加入社群，帮助我们获取您的反馈，<strong>得到更多批改次数</strong>! 💪</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Section -->
+        <div class="MainSection mx-auto flex justify-center pl-14 pb-5 pt-2 bg-neutral-50">
+            <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-2 space-y-2 w-full max-w-4xl">
+                    <!-- Tab Section -->
+                    <div class="flex relative h-28 px-6 py-2">
+                        <button id="tab-correction" class="active-tab p-4 rounded-2xl w-1/2 text-center h-20 transition-all duration-300 ease-in-out origin-left relative">
+                            <div class="text-[#011400] text-2xl font-black font-['Alibaba PuHuiTi 3.0']">作文批改</div>
+                        </button>
+                        <button id="tab-stepbystep" class="inactive-tab p-4 rounded-2xl w-1/2 text-center h-20 transition-all duration-300 ease-in-out origin-right flex flex-row justify-center items-center relative">
+                            <img class="w-16 h-16 pt-2" src="data:image/png;base64,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" alt="Step by Step">
+                            <div class="text-[#010101] text-2xl font-semibold font-['Alibaba PuHuiTi 3.0']">Step-by-Step</div>
+                        </button>
+                    </div>
+
+                    <!-- Task Input Card -->
+                    <div class="TaskCard">
+                        <div class="task-input-panel bg-white rounded-2xl w-full flex flex-col relative">
+                            <!-- Task Input Section -->
+                            <div class="flex flex-col justify-between w-full h-44">
+                                <textarea id="task-input" placeholder="请输入雅思大作文Task2题目" class="task-input w-full px-4 py-4 rounded-2xl focus:outline-none text-left align-top text-[#011400] text-lg font-normal font-['PingFang SC'] resize-none overflow-y-auto h-32"></textarea>
+                                <div class="button-group flex space-x-4 ml-6 mb-5 h-9">
+                                    <label class="upload-button w-30 flex items-center bg-white border border-gray-300 px-3 py-2 rounded-full shadow hover:bg-gray-300 hover:scale-105 cursor-pointer">
+                                        <img src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Folder-upload%20(%26%23230%3b%26%23150%3b%26%23135%3b%26%23228%3b%26%23187%3b%26%23182%3b%26%23229%3b%26%23164%3b%26%23185%3b-%26%23228%3b%26%23184%3b%26%23138%3b%26%23228%3b%26%23188%3b%26%23160%3b)'%3e%3cpath%20id='Vector'%20d='M2.08337%203.33333C2.08337%202.8731%202.45647%202.5%202.91671%202.5H7.91671L10%205H17.0834C17.5436%205%2017.9167%205.37308%2017.9167%205.83333V16.6667C17.9167%2017.1269%2017.5436%2017.5%2017.0834%2017.5H2.91671C2.45647%2017.5%202.08337%2017.1269%202.08337%2016.6667V3.33333Z'%20fill='%23011400'%20stroke='%23011400'%20stroke-width='1.66667'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_2'%20d='M12.5%2010.8277L10%208.33325L7.5%2010.8333'%20stroke='white'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_3'%20d='M10%208.33325V14.1666'%20stroke='white'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" alt="上传文件" class="w-4 h-4 mr-2">
+                                        <p class="text-sm font-normal font-['PingFang SC']">上传文件</p>
+                                        <input type="file" class="hidden" accept=".pdf,.txt,.doc,.docx">
+                                    </label>
+                                    <button class="random-question-button w-30 flex items-center bg-white border border-gray-300 px-3 py-2 rounded-full shadow hover:bg-gray-300 hover:scale-105">
+                                        <img src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Shuffle-one%20(%26%23230%3b%26%23180%3b%26%23151%3b%26%23231%3b%26%23137%3b%26%23140%3b)'%3e%3cpath%20id='Vector'%20d='M16.6667%2013.75L18.3334%2015.4167L16.6667%2017.0833'%20stroke='%23011400'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_2'%20d='M16.6667%202.91675L18.3334%204.58341L16.6667%206.25008'%20stroke='%23011400'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_3'%20d='M18.3333%204.58325H15.4167C12.4251%204.58325%2010%207.00838%2010%209.99992C10%2012.9915%2012.4251%2015.4166%2015.4167%2015.4166H18.3333'%20stroke='%23011400'%20stroke-width='1.66667'%20stroke-linecap='round'/%3e%3cpath%20id='Vector_4'%20d='M1.66669%2015.4166H4.58335C7.5749%2015.4166%2010%2012.9915%2010%209.99992C10%207.00838%207.5749%204.58325%204.58335%204.58325H1.66669'%20stroke='%23011400'%20stroke-width='1.66667'%20stroke-linecap='round'/%3e%3c/g%3e%3c/svg%3e" alt="随机题目" class="w-4 h-4 mr-2">
+                                        <p class="text-sm font-normal font-['PingFang SC']">随机题目</p>
+                                    </button>
+                                    <button class="recent-exam-button flex items-center bg-white border border-gray-300 px-4 py-2 rounded-full shadow hover:bg-gray-300 hover:scale-105">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQdSURBVHgBtVVLTFxVGP7OOffOM8PMQHnTdgKVNjRNJepCpVBMWk2MXeKyjQsfoYmxuiiERBaibozu6MKNMcZETUjUtIlECEVaSMVFTdq0UDDAwCAMDB3mde8993jupUxnoGMhtF9y5/znzPn/73/d/wIF0P39lXN4QqCPOvysbzAUnpro/fTy1VI8LRIT5G1uGC6ui3Y8DRLLe0/Qf9aSl2Jr57v7+gLYI7aROFV3p8PtrqIKw1oqVRKJ4QL2iDyS7sujRd5g4H3TMHBzeAAqYwgvRy9+3t/vxx6g5G4a1mcSqxX7YqZpBs+8ewHhlRWkDX3p4qlT9zfvZAarjigqeU2YqAchfgGxILiYUhXn76Rp+s5jSdra2vilG3evSfF1ay/JUOR235WiEMMHag2Tf00IWiXBBoQAkQuhBNzUoA/V/KZQ+h45MTOVa3dbTVaXo3+m4wlbXo7HoSrsmhipPscFv6lponVy1kQhECJOy3v3+NXqzrzzTUEMhlwIAfNL+0f9xUXH+cw41jUZjc5ilX7YHdb7YwZ//AV8dJah8YiC/4Nu4hX3yfBgNl3ieijENX0UM8LT0et0MdWFdKIOibSClEYDv3ZNgFGBsb912dYmEil31pgV2aUfOFpeAN5oVrPnDka+lMuz2XSZ3PhQxlQu4/VRNaBSRwCLMSfW00zmmiCW2PD6k3YPOt5yo6nxobFfhjRMh3XcnuZ5kQghjicHql7ORgJBiuSPLWpchZfml8p4oF9TTu0nF2dOOrAcy+DN0w5shUOhDXIZsTVkj/xkrZbXWjKKhYWF7EWLz6WaWIya+OLbNPqv63mG6mooes67cbBy+4SS7b3fWrOFl+3XLbvjY0uOrKpYSyqyfQ2UBgwosh7fXdHwzc9p+255CcXRWgWKzEPbCYEyN4cadIE5lS0pQ4/aEu7K0qstc92E4gPJyiuCOg5Xp1BZrNsEFhoPs6yyFdXADQ1rkST2MQ2Kz4H0QhypSDyPRL4+c/aae8iawl9Rzg9JFxa3ht5Qy9AjC//MgYdkL9ZxuKt8ULwOeENBEOlPcnbNKrr9vwk6nZeuXBjD1SMyoS+hAFIZgciygC8eQ0l90H7jN6GvpqDJx1tbDHa7wkHeGdcLkdyTJLV4DLSVJIQh4Czz5p3LWQbKMM6a55+39o/8aMmW9mAHcBR7wFMaMv8m8s4JIzJl5JAYqy4pTAKhYYfwHAxKz02kwvchTJHDBL+RoV2FSQimsAu4KmXxfXJCTEaRiSbt3t0wI0oLkjDB22Wn/INdQC1ywle/D1ShDzjIJEuZHQVJSHPkFlXJc/Jup+yMCewCqt89Rhlrv1PiP0penZ+17e1EMTNUc4wx85jgtJ5QUQGTlElNOSXFuuzCFTkpFuVouqVxjHpaw3Nb9f8DlIum3w3E4BwAAAAASUVORK5CYII=" alt="近期考题" class="w-5 h-5 mr-2">
+                                        近期考题
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Essay Writing Section -->
+                    <div class="rounded-lg min-h-[1240px] mt-6 mx-6">
+                        <div class="essay-input-panel bg-white border border-[#358a55] rounded-lg w-full h-full flex flex-col gap-2 relative">
+                            <!-- Stats Header -->
+                            <div class="flex items-center justify-end gap-5 px-5 py-2">
+                                <div class="flex items-center justify-end gap-1">
+                                    <span id="paragraph-count" class="text-[#2c7911] text-xl font-semibold font-['PingFang SC']">0</span>
+                                    <span class="text-black text-lg font-normal font-['PingFang SC']">Paragraphs</span>
+                                </div>
+                                <div class="flex items-center justify-end gap-1">
+                                    <span id="word-count" class="text-[#2c7911] text-xl font-semibold font-['PingFang SC']">0</span>
+                                    <span class="text-black text-lg font-normal font-['PingFang SC']">Words</span>
+                                </div>
+                            </div>
+
+                            <!-- Writing Area -->
+                            <div class="container mx-auto px-1 h-full flex flex-col rounded-lg">
+                                <div class="min-h-[950px] flex-1 rounded-lg relative">
+                                    <div id="writing-display" class="absolute inset-0 p-4 pointer-events-none z-10 opacity-0 transition-opacity duration-300" style="font-family: 'PingFang SC', monospace; white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; font-size: 18px; color: black; caret-color: rgb(53, 138, 85);"></div>
+                                    <div contenteditable="true" translate="no" id="user-essay" class="tiptap ProseMirror border-gray-400 p-4 mx-auto focus:outline-none max-h-[1050px] relative z-20 bg-transparent focus:bg-white transition-colors" tabindex="0" style="color: black; font-size: 18px; font-weight: 400; font-family: 'PingFang SC'; overflow-y: auto; caret-color: rgb(53, 138, 85);">
+                                        <p>请输入雅思大作文正文内容（且大作文不少于250个词）</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="h-16 flex items-center justify-end gap-2 py-2">
+                                    <button id="toggle-analysis" class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition-colors">
+                                        📊 Show Analysis
+                                    </button>
+                                    <button id="check-writing" class="bg-green-500 text-white px-3 py-2 rounded text-sm hover:bg-green-600">
+                                        🔍 Check Writing
+                                    </button>
+                                    <button id="clear-highlights" class="bg-gray-500 text-white px-3 py-2 rounded text-sm hover:bg-gray-600">
+                                        Clear
+                                    </button>
+                                    <button id="ai-score-btn" class="ai-score-btn w-29 h-10 px-5 py-2 text-white rounded-full flex justify-center items-center">
+                                        <div class="text-white text-base font-normal font-['PingFangHeiTC-W8-Proportional']">AI评分</div>
+                                    </button>
+                                    <button class="w-29 h-10 bg-white rounded-full border border-[#e5e6ea] flex justify-center items-center hover:bg-gray-100">
+                                        <div class="text-black text-base font-normal font-['PingFang SC']">清空</div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-span-1 rounded-lg h-full flex flex-col space-y-5 w-96 px-4">
+                    <div class="p-2 h-20 rounded-lg mt-4"></div>
+                    <div class="flex flex-col items-center gap-4">
+                        <button class="w-64 h-16 px-12 py-6 bg-[#358a55] rounded-full justify-center items-center gap-2.5 inline-flex hover:bg-[#2d7747] transition-all">
+                            <img src="data:image/svg+xml,%3csvg%20width='17'%20height='20'%20viewBox='0%200%2017%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M5.363%2013.8025L4.999%2018.6608C4.97342%2019.0022%205.27692%2019.2373%205.54838%2019.0852C7.47038%2018.0086%2013.491%2014.0543%2016.5424%205.36345C16.6823%204.96478%2016.3063%204.60503%2015.9853%204.82991C14.1828%206.0922%2010.2436%208.70124%207.80921%209.1982C7.80921%209.1982%209.36817%208.11541%2010.3013%206.4532C10.3928%206.29024%2010.3852%206.08166%2010.2832%205.93457L6.88029%201.02983C6.67863%200.739088%206.26475%200.85955%206.19192%201.23015L5.13254%206.62066L0.160155%2010.9604C-0.089158%2011.1779%20-0.0382996%2011.6175%200.249542%2011.7339L5.363%2013.8025Z'%20fill='white'/%3e%3c/svg%3e" alt="AI评分" class="w-4 h-4 mr-2">
+                            <div class="text-center text-white text-lg font-normal font-['PingFang SC']">AI评分</div>
+                        </button>
+
+                        <!-- Timer Component -->
+                        <button class="w-64 h-16 px-4 py-4 bg-white rounded-full shadow border flex items-center justify-center hover:bg-gray-50 transition-all">
+                            <div class="flex justify-center items-center gap-2.5">
+                                <img src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Stopwatch%20(%26%23231%3b%26%23167%3b%26%23146%3b%26%23232%3b%26%23161%3b%26%23168%3b)'%3e%3cpath%20id='Vector'%20d='M9.99996%2018.3332C13.912%2018.3332%2017.0833%2015.1618%2017.0833%2011.2498C17.0833%207.33784%2013.912%204.1665%209.99996%204.1665C6.08796%204.1665%202.91663%207.33784%202.91663%2011.2498C2.91663%2015.1618%206.08796%2018.3332%209.99996%2018.3332Z'%20stroke='%23333333'%20stroke-width='1.66667'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_2'%20d='M12.9167%201.6665H7.08337'%20stroke='%23333333'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_3'%20d='M10%2011.2498V7.08317'%20stroke='%23333333'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20id='Vector_4'%20d='M15.5892%205.24463L14.7683%206.06546'%20stroke='%23333333'%20stroke-width='1.66667'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" alt="Timer" class="w-5 h-5">
+                                <div class="text-[#333333] text-lg font-medium font-['PingFang SC']">30:00</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring Rubric Sidebar -->
+    <div id="scoring-sidebar" class="fixed left-0 top-0 h-full w-80 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-blue-600">IELTS Scoring Rubric</h3>
+                <button id="close-sidebar" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+            <div class="text-sm space-y-4">
+                <div class="bg-green-50 p-3 rounded">
+                    <h4 class="font-bold text-green-700">Band 9 (Expert User)</h4>
+                    <ul class="text-xs mt-2 space-y-1">
+                        <li>• Fully addresses all parts of the task</li>
+                        <li>• Uses a wide range of vocabulary</li>
+                        <li>• Uses a wide range of structures</li>
+                        <li>• Natural and accurate language</li>
+                    </ul>
+                </div>
+                <div class="bg-blue-50 p-3 rounded">
+                    <h4 class="font-bold text-blue-700">Band 7-8 (Good-Very Good)</h4>
+                    <ul class="text-xs mt-2 space-y-1">
+                        <li>• Addresses all parts of the task</li>
+                        <li>• Good range of vocabulary and structures</li>
+                        <li>• Generally error-free</li>
+                        <li>• Clear progression throughout</li>
+                    </ul>
+                </div>
+                <div class="bg-yellow-50 p-3 rounded">
+                    <h4 class="font-bold text-yellow-700">Band 5-6 (Modest-Competent)</h4>
+                    <ul class="text-xs mt-2 space-y-1">
+                        <li>• Addresses the task with some clarity</li>
+                        <li>• Limited range of vocabulary</li>
+                        <li>• Some errors but communication clear</li>
+                    </ul>
+                </div>
+                <div class="bg-red-50 p-3 rounded">
+                    <h4 class="font-bold text-red-700">Band 1-4 (Non User-Limited)</h4>
+                    <ul class="text-xs mt-2 space-y-1">
+                        <li>• Minimal attempt to address task</li>
+                        <li>• Very limited vocabulary</li>
+                        <li>• Frequent errors impede communication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Sidebar -->
+    <div id="timer-sidebar" class="fixed right-0 top-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-green-600">Writing Timer</h3>
+                <button id="close-timer" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+            <div class="text-center">
+                <div id="timer-display" class="text-4xl font-bold text-gray-800 mb-4">60:00</div>
+                <div class="space-y-2">
+                    <button id="start-timer" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">Start Timer</button>
+                    <button id="pause-timer" class="w-full bg-yellow-600 text-white py-2 px-4 rounded hover:bg-yellow-700">Pause</button>
+                    <button id="reset-timer" class="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">Reset</button>
+                </div>
+                <div id="timer-warning" class="mt-4 text-red-600 font-bold hidden">⚠️ 5 minutes left!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Buttons -->
+    <button id="show-sidebar" class="fixed left-4 top-32 bg-blue-600 text-white px-3 py-2 rounded-r hover:bg-blue-700 z-40">
+        📊 Scoring Guide
+    </button>
+    <button id="show-timer" class="fixed right-4 top-32 bg-green-600 text-white px-3 py-2 rounded-l hover:bg-green-700 z-40">
+        ⏱️ Timer
+    </button>
+
+    <!-- Analysis Panel -->
+    <div id="analysis-panel" class="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 border-l">
+        <div class="p-6 h-full flex flex-col">
+            <!-- Panel Header -->
+            <div class="flex justify-between items-center mb-4 pb-4 border-b">
+                <h4 class="font-bold text-gray-800 text-lg">📊 Writing Analysis</h4>
+                <button id="close-analysis" class="text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+            </div>
+            
+            <!-- Analysis Tabs -->
+            <div class="flex mb-4 border-b overflow-x-auto">
+                <button id="tab-errors" class="feedback-tab flex-shrink-0 px-2 py-2 text-xs border-b-2 border-red-500 text-red-600 font-semibold">
+                    <span class="inline-block w-2 h-2 bg-red-200 rounded mr-1"></span>Errors
+                </button>
+                <button id="tab-strengths" class="feedback-tab flex-shrink-0 px-2 py-2 text-xs border-b-2 border-transparent text-gray-600">
+                    <span class="inline-block w-2 h-2 bg-green-200 rounded mr-1"></span>Strengths
+                </button>
+                <button id="tab-vocabulary" class="feedback-tab flex-shrink-0 px-2 py-2 text-xs border-b-2 border-transparent text-gray-600">
+                    <span class="inline-block w-2 h-2 bg-blue-200 rounded mr-1"></span>Vocab
+                </button>
+                <button id="tab-structure" class="feedback-tab flex-shrink-0 px-2 py-2 text-xs border-b-2 border-transparent text-gray-600">
+                    <span class="inline-block w-2 h-2 bg-purple-200 rounded mr-1"></span>Structure
+                </button>
+                <button id="tab-ielts" class="feedback-tab flex-shrink-0 px-2 py-2 text-xs border-b-2 border-transparent text-gray-600">
+                    <span class="inline-block w-2 h-2 bg-indigo-200 rounded mr-1"></span>IELTS
+                </button>
+                <button id="tab-overall" class="feedback-tab flex-shrink-0 px-2 py-2 text-xs border-b-2 border-transparent text-gray-600">
+                    <span class="inline-block w-2 h-2 bg-gray-200 rounded mr-1"></span>Summary
+                </button>
+            </div>
+            
+            <!-- Feedback Content -->
+            <div id="feedback-content" class="flex-1 overflow-y-auto">
+                <!-- Errors Panel -->
+                <div id="feedback-errors" class="feedback-panel">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-2">✍️</div>
+                        <p class="text-sm">Start writing to see spelling and grammar checks...</p>
+                    </div>
+                </div>
+                
+                <!-- Other panels would be similar to the TOEFL version but adapted for IELTS -->
+                <div id="feedback-strengths" class="feedback-panel hidden">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-2">🌟</div>
+                        <p class="text-sm">Your writing strengths will appear here...</p>
+                    </div>
+                </div>
+                
+                <div id="feedback-vocabulary" class="feedback-panel hidden">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-2">📚</div>
+                        <p class="text-sm">Vocabulary analysis will appear here...</p>
+                    </div>
+                </div>
+                
+                <div id="feedback-structure" class="feedback-panel hidden">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-2">🏗️</div>
+                        <p class="text-sm">Writing structure analysis will appear here...</p>
+                    </div>
+                </div>
+                
+                <div id="feedback-ielts" class="feedback-panel hidden">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-2">🎯</div>
+                        <p class="text-sm">IELTS-specific tips will appear here...</p>
+                    </div>
+                </div>
+                
+                <div id="feedback-overall" class="feedback-panel hidden">
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-2">📊</div>
+                        <p class="text-sm">Overall assessment will appear here...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="mt-4 pt-4 border-t">
+                <p class="text-xs font-semibold text-gray-600 mb-2">Color Legend:</p>
+                <div class="grid grid-cols-2 gap-1 text-xs">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-red-200 rounded border border-red-300"></span>
+                        <span>Errors</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-green-200 rounded border border-green-300"></span>
+                        <span>Strengths</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-blue-200 rounded border border-blue-300"></span>
+                        <span>Vocabulary</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-yellow-200 rounded border border-yellow-300"></span>
+                        <span>Improve</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring Section -->
+    <div class="bg-white shadow p-4 rounded-xl mt-6 mx-6" id="scoring-section" style="display: none;">
+        <h2 class="text-xl font-semibold mb-2">Essay Scoring & Analysis</h2>
+        <div id="scoring" class="w-full border rounded mb-2 text-gray-700 min-h-[200px]"></div>
+    </div>
+
+    <script>
+        let currentAnalysis = null;
+        let highlightTimeout = null;
+        let timerInterval = null;
+        let timeLeft = 60 * 60; // 60 minutes for IELTS
+        let isRunning = false;
+
+        // Word count functionality
+        function updateWordCount() {
+            const text = document.getElementById('user-essay').textContent || document.getElementById('user-essay').innerText;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            const paragraphs = text.trim() === '' ? 0 : text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+            
+            document.getElementById('word-count').textContent = words;
+            document.getElementById('paragraph-count').textContent = paragraphs;
+            
+            // Auto-check writing after user stops typing for 3 seconds
+            clearTimeout(highlightTimeout);
+            if (words > 10) {
+                highlightTimeout = setTimeout(() => {
+                    checkWritingAutomatically();
+                }, 3000);
+            }
+        }
+
+        // Timer functions
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer-display').textContent = display;
+            
+            // Flash warning when 5 minutes left
+            if (timeLeft <= 5 * 60 && timeLeft > 0) {
+                document.getElementById('timer-warning').classList.remove('hidden');
+                if (timeLeft <= 5 * 60 && timeLeft % 2 === 0) {
+                    document.getElementById('timer-display').classList.add('text-red-600');
+                    document.getElementById('timer-display').style.animation = 'blink 1s infinite';
+                }
+            } else {
+                document.getElementById('timer-warning').classList.add('hidden');
+                document.getElementById('timer-display').classList.remove('text-red-600');
+                document.getElementById('timer-display').style.animation = 'none';
+            }
+            
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                alert('Time is up! 60 minutes have elapsed.');
+            }
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 60 * 60;
+            updateTimerDisplay();
+        }
+
+        // Sidebar functions
+        function showSidebar() {
+            document.getElementById('scoring-sidebar').classList.remove('-translate-x-full');
+            document.getElementById('show-sidebar').classList.add('hidden');
+        }
+
+        function hideSidebar() {
+            document.getElementById('scoring-sidebar').classList.add('-translate-x-full');
+            document.getElementById('show-sidebar').classList.remove('hidden');
+        }
+
+        function showTimer() {
+            document.getElementById('timer-sidebar').classList.remove('translate-x-full');
+            document.getElementById('show-timer').classList.add('hidden');
+        }
+
+        function hideTimer() {
+            document.getElementById('timer-sidebar').classList.add('translate-x-full');
+            document.getElementById('show-timer').classList.remove('hidden');
+        }
+
+        // Analysis panel functions
+        function showAnalysisPanel() {
+            document.getElementById('analysis-panel').classList.remove('translate-x-full');
+            document.getElementById('toggle-analysis').innerHTML = '📊 Hide Analysis';
+            document.getElementById('toggle-analysis').classList.remove('bg-blue-500', 'hover:bg-blue-600');
+            document.getElementById('toggle-analysis').classList.add('bg-gray-500', 'hover:bg-gray-600');
+        }
+
+        function hideAnalysisPanel() {
+            document.getElementById('analysis-panel').classList.add('translate-x-full');
+            document.getElementById('toggle-analysis').innerHTML = '📊 Show Analysis';
+            document.getElementById('toggle-analysis').classList.remove('bg-gray-500', 'hover:bg-gray-600');
+            document.getElementById('toggle-analysis').classList.add('bg-blue-500', 'hover:bg-blue-600');
+        }
+
+        function toggleAnalysisPanel() {
+            const panel = document.getElementById('analysis-panel');
+            if (panel.classList.contains('translate-x-full')) {
+                showAnalysisPanel();
+            } else {
+                hideAnalysisPanel();
+            }
+        }
+
+        // Writing analysis functions (simplified for demo)
+        async function checkWritingAutomatically() {
+            const text = document.getElementById('user-essay').textContent || document.getElementById('user-essay').innerText;
+            if (text.length < 50) return;
+            
+            // This would connect to your backend
+            console.log('Auto-checking writing:', text);
+        }
+
+        async function checkWritingManually() {
+            const text = document.getElementById('user-essay').textContent || document.getElementById('user-essay').innerText;
+            if (!text.trim()) {
+                alert('Please write something first!');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('feedback-errors').innerHTML = '<div class="text-blue-600">🔍 Analyzing your writing...</div>';
+            
+            // This would connect to your backend
+            console.log('Manual check:', text);
+            showAnalysisPanel();
+        }
+
+        // Event listeners
+        document.getElementById('user-essay').addEventListener('input', updateWordCount);
+        document.getElementById('check-writing').addEventListener('click', checkWritingManually);
+        document.getElementById('toggle-analysis').addEventListener('click', toggleAnalysisPanel);
+        document.getElementById('close-analysis').addEventListener('click', hideAnalysisPanel);
+
+        // Sidebar event listeners
+        document.getElementById('show-sidebar').addEventListener('click', showSidebar);
+        document.getElementById('close-sidebar').addEventListener('click', hideSidebar);
+        document.getElementById('show-timer').addEventListener('click', showTimer);
+        document.getElementById('close-timer').addEventListener('click', hideTimer);
+        
+        document.getElementById('start-timer').addEventListener('click', startTimer);
+        document.getElementById('pause-timer').addEventListener('click', pauseTimer);
+        document.getElementById('reset-timer').addEventListener('click', resetTimer);
+
+        // Tab switching for main tabs
+        document.getElementById('tab-correction').addEventListener('click', function() {
+            this.classList.remove('inactive-tab');
+            this.classList.add('active-tab');
+            document.getElementById('tab-stepbystep').classList.remove('active-tab');
+            document.getElementById('tab-stepbystep').classList.add('inactive-tab');
+        });
+
+        document.getElementById('tab-stepbystep').addEventListener('click', function() {
+            this.classList.remove('inactive-tab');
+            this.classList.add('active-tab');
+            document.getElementById('tab-correction').classList.remove('active-tab');
+            document.getElementById('tab-correction').classList.add('inactive-tab');
+        });
+
+        // Feedback tab switching
+        function switchFeedbackTab(tabName) {
+            // Update tab styles
+            document.querySelectorAll('.feedback-tab').forEach(tab => {
+                tab.classList.remove('border-red-500', 'text-red-600', 'border-green-500', 'text-green-600', 'border-blue-500', 'text-blue-600', 'border-purple-500', 'text-purple-600', 'border-indigo-500', 'text-indigo-600', 'border-gray-500', 'text-gray-800', 'font-semibold');
+                tab.classList.add('border-transparent', 'text-gray-600');
+            });
+            
+            // Hide all panels
+            document.querySelectorAll('.feedback-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Show selected tab and panel
+            const selectedTab = document.getElementById(`tab-${tabName}`);
+            const selectedPanel = document.getElementById(`feedback-${tabName}`);
+            
+            if (selectedTab && selectedPanel) {
+                selectedPanel.classList.remove('hidden');
+                
+                // Set appropriate colors for each tab
+                switch(tabName) {
+                    case 'errors':
+                        selectedTab.classList.add('border-red-500', 'text-red-600', 'font-semibold');
+                        break;
+                    case 'strengths':
+                        selectedTab.classList.add('border-green-500', 'text-green-600', 'font-semibold');
+                        break;
+                    case 'vocabulary':
+                        selectedTab.classList.add('border-blue-500', 'text-blue-600', 'font-semibold');
+                        break;
+                    case 'structure':
+                        selectedTab.classList.add('border-purple-500', 'text-purple-600', 'font-semibold');
+                        break;
+                    case 'ielts':
+                        selectedTab.classList.add('border-indigo-500', 'text-indigo-600', 'font-semibold');
+                        break;
+                    case 'overall':
+                        selectedTab.classList.add('border-gray-500', 'text-gray-800', 'font-semibold');
+                        break;
+                }
+            }
+        }
+
+        // Feedback tab event listeners
+        document.getElementById('tab-errors').addEventListener('click', () => switchFeedbackTab('errors'));
+        document.getElementById('tab-strengths').addEventListener('click', () => switchFeedbackTab('strengths'));
+        document.getElementById('tab-vocabulary').addEventListener('click', () => switchFeedbackTab('vocabulary'));
+        document.getElementById('tab-structure').addEventListener('click', () => switchFeedbackTab('structure'));
+        document.getElementById('tab-ielts').addEventListener('click', () => switchFeedbackTab('ielts'));
+        document.getElementById('tab-overall').addEventListener('click', () => switchFeedbackTab('overall'));
+
+        // Initialize
+        updateTimerDisplay();
+        updateWordCount();
+        switchFeedbackTab('errors');
+    </script>
+</body>
+</html>

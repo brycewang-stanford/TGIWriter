@@ -12,7 +12,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home_improved.html')
 
 @app.route('/toefl')
 def toefl():
@@ -25,6 +25,19 @@ def gre():
 @app.route('/ielts')
 def ielts():
     return render_template('ielts.html')
+
+# Improved versions
+@app.route('/toefl_improved')
+def toefl_improved():
+    return render_template('toefl_improved.html')
+
+@app.route('/gre_improved')
+def gre_improved():
+    return render_template('gre_improved.html')
+
+@app.route('/ielts_improved')
+def ielts_improved():
+    return render_template('ielts_improved.html')
 
 @app.route('/generate_sample', methods=['POST'])
 def generate_sample():
@@ -659,4 +672,4 @@ def generate_fallback_analysis(essay_text):
     }
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5002)
+    app.run(debug=True, host='0.0.0.0', port=5002)
