@@ -1,4 +1,5 @@
-# TGIWriter - AI-Powered Writing Assistant<img width="1215" alt="image" src="https://github.com/user-attachments/assets/e7aa8994-5d7a-4b34-bb5b-65f10052682a" />
+# TGIWriter - AI-Powered Writing Assistant<img width="872" height="1001" alt="image" src="https://github.com/user-attachments/assets/158c2c5a-36dc-4bf6-9f3c-3f47a0c1f83e" />
+
 
 🚀 **An intelligent writing assistant for TOEFL, GRE, and IELTS test preparation with real-time AI analysis and feedback**
 
@@ -25,7 +26,8 @@ This project is a simple reproduction and improvement of existing writing assist
 
 ## 🌟 Features
 
-### 🎯 Multi-Test Support
+### 🎯 Multi-Test Support<img width="1262" height="638" alt="image" src="https://github.com/user-attachments/assets/2bbb33ee-7cfa-4857-98c6-c6157c67ba35" />
+
 - **TOEFL** (Test of English as a Foreign Language)
 - **GRE** (Graduate Record Examination)  
 - **IELTS** (International English Language Testing System)
