@@ -1,7 +1,14 @@
 # TGIWriter - AI-Powered Writing Assistant<img width="1215" alt="image" src="https://github.com/user-attachments/assets/e7aa8994-5d7a-4b34-bb5b-65f10052682a" />
 
-
 🚀 **An intelligent writing assistant for TOEFL, GRE, and IELTS test preparation with real-time AI analysis and feedback**
+
+## ⚠️ Disclaimer / 免责声明
+
+**English:**
+This project is a simple reproduction and improvement of existing writing assistance tools, created solely for **personal learning and educational purposes**. We have **no commercial intentions** and do not plan to monetize this project. Please respect the intellectual property rights of the original websites and services. This project is intended for educational exploration and technical learning only.
+
+**中文:**
+本项目是对现有写作辅助工具（EasyWriting）的简单复现和改进，仅用于**个人学习和教育目的**。我们**没有任何商业化打算**，不会将此项目进行商业化运营。请尊重原网站和服务的知识产权。本项目仅用于教育探索和技术学习。
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
@@ -213,6 +220,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 # TGIWriter - AI智能写作助手
 
 🚀 **为托福、GRE和雅思考试准备提供实时AI分析和反馈的智能写作助手**
+
+## ⚠️ 免责声明 / Disclaimer
+
+**中文:**
+本项目是对现有写作辅助工具的简单复现和改进，仅用于**个人学习和教育目的**。我们**没有任何商业化打算**，不会将此项目进行商业化运营。请尊重原网站和服务的知识产权。本项目仅用于教育探索和技术学习。
+
+**English:**
+This project is a simple reproduction and improvement of existing writing assistance tools, created solely for **personal learning and educational purposes**. We have **no commercial intentions** and do not plan to monetize this project. Please respect the intellectual property rights of the original websites and services. This project is intended for educational exploration and technical learning only.
 
 ## 🚧 项目状态
 
