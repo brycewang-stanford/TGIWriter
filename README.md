@@ -1,4 +1,4 @@
-# TGIWriter - AI-Powered Writing Assistant<img width="872" height="1001" alt="image" src="https://github.com/user-attachments/assets/158c2c5a-36dc-4bf6-9f3c-3f47a0c1f83e" />
+# TGIWriter - AI (GPT-4o)-Powered Writing Assistant<img width="872" height="1001" alt="image" src="https://github.com/user-attachments/assets/158c2c5a-36dc-4bf6-9f3c-3f47a0c1f83e" />
 
 
 🚀 **An intelligent writing assistant for TOEFL, GRE, and IELTS test preparation with real-time AI analysis and feedback**
